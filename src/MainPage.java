@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -42,7 +43,7 @@ public class MainPage extends javax.swing.JFrame {
         Process p = bu.start();
         BufferedReader s1 = new BufferedReader(new InputStreamReader(p.getInputStream()));
         jTextArea1.setText(s1.toString());*/
-         try{
+      /*   try{
         ServerSocket m_ser = new ServerSocket(6377);
         //jTextArea1.setText("hhhufyc");
         System.out.println("Started");
@@ -62,7 +63,7 @@ public class MainPage extends javax.swing.JFrame {
        // InetAddress m = m_ser.getInetAddress();
        // String m_ip = m.getAddress().toString();
        //jTextArea1.append("Listiing port "+m_ip);
-        }catch(Exception E){System.out.println("Exception aa gayi reeeeeee");};
+        }catch(Exception E){System.out.println("Exception aa gayi reeeeeee");};*/
         
     }
       DataInputStream d_in ;
@@ -78,6 +79,7 @@ public class MainPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +90,13 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("SSSSSS");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,14 +104,20 @@ public class MainPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(294, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(209, 209, 209))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGap(115, 115, 115)
+                .addComponent(jButton2)
+                .addContainerGap(249, Short.MAX_VALUE))
         );
 
         pack();
@@ -126,6 +141,8 @@ public class MainPage extends javax.swing.JFrame {
             MoveMouse();
         if(in.equals("scr"))
             ScreenShot();
+        if(in.equals("prss"))
+            process();
         }
        // InetAddress m = m_ser.getInetAddress();
        // String m_ip = m.getAddress().toString();
@@ -133,6 +150,15 @@ public class MainPage extends javax.swing.JFrame {
         }catch(Exception E){System.out.println("Exception aa gayi reeeeeee");};
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            process();
+            // TODO add your handling code here:
+        } catch (IOException ex) {
+            Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,6 +201,7 @@ public class MainPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     // End of variables declaration//GEN-END:variables
 
     private void MoveMouse() throws IOException, InterruptedException, AWTException {
@@ -226,4 +253,33 @@ public class MainPage extends javax.swing.JFrame {
         } catch (AWTException | IOException ex) {
             System.err.println(ex);
         } }
+
+    private void process() throws IOException {
+      ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "tasklist /FI \"PID gt 1000\"");          
+      builder.redirectErrorStream(true); 
+      Process p = builder.start(); 
+      BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream())); 
+      String line; 
+      String[] arofp = new String [1000];
+      int i=0;
+    //  StringBuilder process = null;
+      while (true) { 
+            //String tmp;
+            line = r.readLine(); 
+            if (line == null) { break; }
+          int l1 = line.indexOf(".", 0);
+          if(l1>0){
+           arofp[i] =  line.substring(0, l1);
+           i++;
+          }
+          System.out.println(line+"L1 :"+l1); 
+        
+   }
+      d_out.writeInt(i-1);
+       for(int j=0;arofp[j]!=null;j++)
+          d_out.writeUTF(arofp[j]);
+      System.out.println("Sent Array");
+}
+
+    
 }
