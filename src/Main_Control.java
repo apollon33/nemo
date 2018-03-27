@@ -159,24 +159,6 @@ public class Main_Control extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String ip = jTextField1.getText();
-        try {
-          s1 = new Socket(ip,6377);
-            System.out.println("Connected");
-          d_out = new DataOutputStream(s1.getOutputStream());
-          d_in = new DataInputStream(s1.getInputStream());
-          System.out.println(d_in.readUTF());
-            
-        } catch (IOException ex) {
-            Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     try {
         d_out.writeUTF("MouseButton");
@@ -240,6 +222,24 @@ public class Main_Control extends javax.swing.JFrame {
             Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String ip = jTextField1.getText();
+        try {
+            s1 = new Socket(ip,6377);
+            System.out.println("Connected");
+            d_out = new DataOutputStream(s1.getOutputStream());
+            d_in = new DataInputStream(s1.getInputStream());
+            System.out.println(d_in.readUTF());
+
+        } catch (IOException ex) {
+            Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
