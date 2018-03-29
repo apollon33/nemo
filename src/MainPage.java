@@ -122,12 +122,14 @@ public class MainPage extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+ServerSocket m_ser ;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    
+    while(true){
         try{
-        ServerSocket m_ser = new ServerSocket(6377);
+        System.out.println("Trying to create server");
+        m_ser = new ServerSocket(6377);
         //jTextArea1.setText("hhhufyc");
+        
         System.out.println("Started");
         Socket cli = m_ser.accept();
        // jTextArea1.append("\nClient aa gya");
@@ -147,10 +149,17 @@ public class MainPage extends javax.swing.JFrame {
        // InetAddress m = m_ser.getInetAddress();
        // String m_ip = m.getAddress().toString();
        //jTextArea1.append("Listiing port "+m_ip);
-        }catch(Exception E){System.out.println("Exception aa gayi reeeeeee");};
-        // TODO add your handling code here:
+        }catch(Exception E){try {
+            System.out.println("Exception aa gayi reeeeeee");
+           m_ser.close();
+            }
+            // TODO add your handling code here:
+            catch (IOException ex) {
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+}
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             process();
@@ -209,6 +218,8 @@ public class MainPage extends javax.swing.JFrame {
         while(true){
         String res = "";
     res = d_in.readUTF();
+    if(res.equals("end"))
+        break;
     int len = res.length();
     int x=0,y=0;
     int del = res.indexOf(":");
