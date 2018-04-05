@@ -233,7 +233,7 @@ public class HomePage extends javax.swing.JFrame {
     }
 
     private boolean checkIP(String IP) {
-        String ping = "ping -c 1 -q -w 1 "+IP;
+        String ping = "ping -n 1 -w 100 "+IP;
             Runtime r = Runtime.getRuntime();
        // ProcessBuilder pb = new ProcessBuilder(ping);
        // ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "tasklist /FI \"PID gt 1000\"");   
@@ -246,7 +246,7 @@ public class HomePage extends javax.swing.JFrame {
           //  System.out.println(lin);
             if(lin==null)
                 break;
-            int rec = lin.indexOf("min/avg/max/mdev");
+            int rec = lin.indexOf("Reply");
             //System.out.println("rec :"+rec);
             if(rec != -1)
              return true;
