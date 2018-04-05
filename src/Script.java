@@ -34,31 +34,46 @@ public class Script extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Copy");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        jLabel1.setText("IP");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(159, 159, 159)
-                .addComponent(jButton1)
-                .addContainerGap(168, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(146, 146, 146)
+                        .addComponent(jButton1)))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(140, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addGap(137, 137, 137))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
 
         pack();
@@ -67,8 +82,14 @@ public class Script extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Runtime r = Runtime.getRuntime();
       
-       String cmd = "C:/Users/Administrator/Desktop/New folder (2)/psexec.exe \\\172.16.5.161 -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/downloads/NEW.exe\"";
-       String cpyCMD = "xcopy C:\\Users\\Administrator\\Desktop\\NEW.exe \\\172.16.5.161\\users\\student\\downloads\\ /y";
+       String cmd = "C:/Users/Administrator/Desktop/New folder (2)/psexec.exe \\\\172.16.5.161 -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/NEW.exe\"";
+       String ip = jTextField1.getText();
+       ip.trim();
+       String cpyCMD = "xcopy C:\\Users\\Administrator\\Desktop\\NEW.exe "
+               + "\\\\"
+               + ip
+               + "\\users\\student\\downloads\\ /y";
+       System.out.println(cmd);
        ProcessBuilder ps = new ProcessBuilder("cmd","/c",cpyCMD);
         try {
             Process p = ps.start();
@@ -123,5 +144,7 @@ public class Script extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
