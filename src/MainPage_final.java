@@ -29,7 +29,7 @@ import javax.swing.JOptionPane;
  *
  * @author shivam
  */
-public class MainPage_final {
+public class MainPage_final{
 
     
     
@@ -76,11 +76,10 @@ public class MainPage_final {
       
     private void MoveMouse() throws IOException, InterruptedException, AWTException {
 
-        while(true){
         String res = "";
     res = d_in.readUTF();
-    if(res.equals("end"))
-        break;
+   // if(res.equals("end"))
+     //   break;
     int len = res.length();
     int x=0,y=0;
     int del = res.indexOf(":");
@@ -96,7 +95,7 @@ public class MainPage_final {
    r.mouseMove(x, y);
 
         
-        }
+        
     }
 
     private void ScreenShot() {
@@ -157,11 +156,18 @@ public class MainPage_final {
         String mm;
          try {
              mm = d_in.readUTF();
-             JOptionPane.showMessageDialog(null, mm, "Admin", JOptionPane.WARNING_MESSAGE);
+              Thread t = new Thread(new Runnable(){
+        public void run(){
+            JOptionPane.showMessageDialog(null, mm);
+        }
+    });
+  t.start();
+           //  JOptionPane.showMessageDialog(null, mm, "Admin", JOptionPane.WARNING_MESSAGE);
          } catch (IOException ex) {
              Logger.getLogger(MainPage_final.class.getName()).log(Level.SEVERE, null, ex);
          }
        
     }
+  
     
 }

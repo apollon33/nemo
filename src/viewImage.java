@@ -1,5 +1,7 @@
 
 import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -72,6 +74,11 @@ try {
 
         jLabel2.setMaximumSize(new java.awt.Dimension(800, 600));
         jLabel2.setMinimumSize(new java.awt.Dimension(800, 600));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
 
         jButton1.setText("Play");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +87,7 @@ try {
             }
         });
 
-        jButton2.setText("Stop");
+        jButton2.setText("jButton2");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -91,26 +98,25 @@ try {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 818, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addGap(136, 136, 136))
+                .addGap(54, 54, 54)
+                .addComponent(jButton1)
+                .addGap(209, 209, 209))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 422, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(35, 35, 35))
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -146,7 +152,7 @@ try {
                BufferedImage img = null;
 try {
     img = ImageIO.read(new File("s.jpg"));
-      Image dimg = img.getScaledInstance(800, 600,
+      Image dimg = img.getScaledInstance(863, 384,
         Image.SCALE_SMOOTH);
     ImageIcon imageIcon = new ImageIcon(dimg);
     jLabel2.setIcon(imageIcon);
@@ -173,8 +179,25 @@ try {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-timer.cancel();        // TODO add your handling code here:
+            Point p = MouseInfo.getPointerInfo().getLocation();
+            p = new Point(p.x - this.getLocation().x, p.y - this.getLocation().y);
+            System.out.println("Mouse: " + p);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        Point p = MouseInfo.getPointerInfo().getLocation();
+            p = new Point(p.x - this.getLocation().x, p.y - this.getLocation().y);
+            p.x *= 2;
+            p.y *= 2;
+            System.out.println("Mouse: " + p);
+    try {
+        d_out.writeUTF("MouseButton");
+         d_out.writeUTF(p.x+":"+p.y);
+    } catch (IOException ex) {
+        Logger.getLogger(viewImage.class.getName()).log(Level.SEVERE, null, ex);
+    }
+            
+    }//GEN-LAST:event_jLabel2MouseClicked
 
     /**
      * @param args the command line arguments

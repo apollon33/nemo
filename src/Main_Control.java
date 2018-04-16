@@ -201,7 +201,7 @@ public class Main_Control extends javax.swing.JFrame {
     try {
         d_out.writeUTF("MouseButton");
         while(true){
-        Thread.sleep(1);
+        Thread.sleep(100);
         String x = ""+MouseInfo.getPointerInfo().getLocation().x;
         String y = ""+MouseInfo.getPointerInfo().getLocation().y;
         d_out.writeUTF(x+":"+y);
