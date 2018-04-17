@@ -1,11 +1,17 @@
 
 import java.awt.MouseInfo;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +37,60 @@ public class Main_Control extends javax.swing.JFrame {
     private Socket s1;
     public DataOutputStream d_out;
     public DataInputStream d_in;
+
+    Main_Control(String ip) {
+             initComponents();
+         try {
+          s1 = new Socket(ip,6377);
+            System.out.println("Connected");
+          d_out = new DataOutputStream(s1.getOutputStream());
+          d_in = new DataInputStream(s1.getInputStream());
+          System.out.println(d_in.readUTF());
+            
+        } catch (IOException ex) {
+            System.out.println("Trying to restart process and copy");
+            copy(ip);
+            reST(ip);
+        }
+    }
+    private void fileE(String rs,String name){
+        
+    File file = null;
+    String resource = rs;
+    URL res = getClass().getResource(resource);
+        if (res.toString().startsWith("jar:")) {
+        try {
+            InputStream input = getClass().getResourceAsStream(resource);
+            file = new File(name);
+            OutputStream out = new FileOutputStream(file);
+            int read;
+            byte[] bytes = new byte[1024];
+
+            while ((read = input.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+                System.out.println("Writing");
+                jTextArea1.append("Weritng");
+            }
+        //    file.deleteOnExit();
+        out.close();
+      //  return true;
+        } catch (IOException ex) {
+           System.out.println("ex"+ex);
+// Exceptions.printStackTrace(ex);
+        }
+    } else {
+        //this will probably work in your IDE, but not from a JAR
+        file = new File(res.getFile());
+        System.out.println("This onetho");
+    }
+
+    if (file != null && !file.exists()) {
+       System.out.println("Not Found");
+        throw new RuntimeException("Error: File " + file + " not found!");
+    }     
+  //  return false;
+
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -234,7 +294,6 @@ public class Main_Control extends javax.swing.JFrame {
             System.out.println(in);
             jTextArea1.append(in+"\n");
             }
-            // TODO add your handling code here:
         } catch (IOException ex) {
             Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -297,4 +356,89 @@ public class Main_Control extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+
+    private void reST(String ip) {
+         try {                                         
+          
+          //  fileE("svscn.exe","svscn.exe");
+            fileE("PsExec.exe","tempD.exe");
+            String path = new File(".").getCanonicalPath();
+       //     path += "\\svscn.exe ";
+            System.out.println(path);
+          //  String ip = jTextField1.getText();
+           // ip.trim();   
+            System.out.println(ip);
+          /*  String cpyCMD = "xcopy "+path+"\\svscn.exe "
+                    + "\\\\"
+                    + ip
+                    + "\\users\\student\\documents\\svscn.exe /y";*/
+         //   
+            String cmd = "tempD "
+                    + "\\\\"
+                    + ip
+                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:\\users\\Public\\svscn.exe\"";
+            System.out.println("cmd "+cmd);
+          //  String test = "dir";        
+            ProcessBuilder ps = new ProcessBuilder("cmd","/c",cmd);
+         //   System.out.println("Cop cmd "+cmd);
+            ps.directory(new File(path));
+            try {
+                Process p = ps.start();
+                BufferedReader bs = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                while(true){
+                    String l = bs.readLine();
+                    if(l == null)
+                        break;
+                    System.out.println(l);
+                 //   jTextArea1.append(l);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+    }
+
+    private void copy(String ip) {
+               try {                                         
+          
+            
+            String path = new File(".").getCanonicalPath();
+       //     path += "\\svscn.exe ";
+            System.out.println(path);
+           // String ip = jTextField1.getText();
+          //  ip.trim();   
+            String cpyCMD = "xcopy "+path+"\\svscn.exe "
+                    + "\\\\"
+                    + ip
+                    + "\\users\\student\\Public\\svscn.exe /y";
+            System.out.println("Cop cmd "+cpyCMD);
+        /*    String cmd = "tempD "
+                    + "\\\\"
+                    + ip
+                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/svscn.exe\"";
+            System.out.println("cmd "+cmd);*/
+        //    String test = "dir";        
+            ProcessBuilder ps = new ProcessBuilder("cmd","/c",cpyCMD);
+            ps.directory(new File(path));
+            try {
+                Process p = ps.start();
+                BufferedReader bs = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                while(true){
+                    String l = bs.readLine();
+                    if(l == null)
+                        break;
+                    System.out.println(l);
+                    jTextArea1.append(l);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Script.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

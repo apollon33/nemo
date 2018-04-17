@@ -10,6 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -64,7 +65,7 @@ public class MainPage_final{
            m_ser.close();
             }
             catch (IOException ex) {
-                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+              //  Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
             }
 }
     }       
@@ -108,19 +109,8 @@ public class MainPage_final{
             BufferedImage screenFullImage = robot.createScreenCapture(screenRect);
             File f = new File(fileName);
             ImageIO.write(screenFullImage, format, f);
-           // ImageIO.w
-            
             System.out.println("A full screenshot saved!");
-            File myFile = new File("FullScreenshot.jpg");
-            byte[] mybytearray = new byte[(int) myFile.length()];
-      BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
-      bis.read(mybytearray, 0, mybytearray.length);
-      int size = mybytearray.length;
-      System.out.println("OUPUT BYTES ARE "+size );
-      d_out.writeDouble(size);
-      d_out.write(mybytearray, 0, mybytearray.length);
-      d_out.flush();
-               
+            sendFile("FullScreenshot.jpg");     
         } catch (AWTException | IOException ex) {
             System.err.println(ex);
         } }
@@ -167,6 +157,29 @@ public class MainPage_final{
              Logger.getLogger(MainPage_final.class.getName()).log(Level.SEVERE, null, ex);
          }
        
+    }
+
+    private void sendFile(String fullScreenshotjpg) throws IOException {
+        BufferedInputStream bis = null;
+         try {
+             File myFile = new File(fullScreenshotjpg);
+             byte[] mybytearray = new byte[(int) myFile.length()];
+             bis = new BufferedInputStream(new FileInputStream(myFile));
+             bis.read(mybytearray, 0, mybytearray.length);
+             int size = mybytearray.length;
+             System.out.println("OUPUT BYTES ARE "+size );
+             d_out.writeDouble(size);
+             d_out.write(mybytearray, 0, mybytearray.length);
+             d_out.flush();
+         } catch (FileNotFoundException ex) {
+             Logger.getLogger(MainPage_final.class.getName()).log(Level.SEVERE, null, ex);
+         } finally {
+             try {
+                 bis.close();
+             } catch (IOException ex) {
+                 Logger.getLogger(MainPage_final.class.getName()).log(Level.SEVERE, null, ex);
+             }
+         }
     }
   
     

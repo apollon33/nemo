@@ -133,19 +133,19 @@ try {
     int count = 0;
     int rsize = 0;
     int size = (int) d_in.readDouble();
-    System.out.println("reciving size "+size);
+ //   System.out.println("reciving size "+size);
    while (rsize<size)
 {
     count = d_in.read(mybytearray);
     rsize+=count;
-    System.out.println("inloop count "+count+"rSize"+rsize+"  size :"+size);
+   // System.out.println("inloop count "+count+"rSize"+rsize+"  size :"+size);
     
   bos.write(mybytearray, 0, count);
 }
-   System.out.println("OULOOP");
+ //  System.out.println("OULOOP");
 
    bos.close();
-       System.out.println("OULOOP 1");
+     //  System.out.println("OULOOP 1");
         } catch (IOException ex) {
             Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
         }
