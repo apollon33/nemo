@@ -3,6 +3,7 @@ import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -59,6 +60,8 @@ public class MainPage_final{
             process();
         if(in.equals("msg"))
             msg();
+        if(in.equals("key"))
+            key();
         }
         }catch(Exception E){try {
             System.out.println(E);
@@ -94,7 +97,9 @@ public class MainPage_final{
       Thread.sleep(1);
    Robot r = new Robot();
    r.mouseMove(x, y);
-
+  // Thread.sleep(10);
+   r.mousePress(InputEvent.BUTTON1_MASK);
+   r.mouseRelease(InputEvent.BUTTON1_MASK);
         
         
     }
@@ -180,6 +185,16 @@ public class MainPage_final{
                  Logger.getLogger(MainPage_final.class.getName()).log(Level.SEVERE, null, ex);
              }
          }
+    }
+
+    private void key() {
+         try {
+             Robot r = new Robot();
+           
+         } catch (AWTException ex) {
+             Logger.getLogger(MainPage_final.class.getName()).log(Level.SEVERE, null, ex);
+         }
+       
     }
   
     
