@@ -121,16 +121,15 @@ public class MainPage_final{
         } }
 
     private void process() throws IOException {
-      ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "tasklist /FI \"PID gt 1000\"");          
+      String cmd = d_in.readUTF();
+      ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c",cmd);          
       builder.redirectErrorStream(true); 
       Process p = builder.start(); 
       BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream())); 
       String line; 
       String[] arofp = new String [1000];
       int i=0;
-    //  StringBuilder process = null;
       while (true) { 
-            //String tmp;
             line = r.readLine(); 
             if (line == null) { break; }
           int l1 = line.indexOf(".", 0);

@@ -66,6 +66,11 @@ DataOutputStream d_out;
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton2.setText("Run CMD");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,6 +107,7 @@ DataOutputStream d_out;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     try {
             d_out.writeUTF("prss");
+            d_out.writeUTF("tasklist /FI \"PID gt 1000\"");
             int len = d_in.readInt();
             for(int j=0;j<=len;j++){
             String in = d_in.readUTF();
@@ -114,6 +120,10 @@ DataOutputStream d_out;
             Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

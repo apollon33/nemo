@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -49,32 +50,16 @@ public class Main_Control extends javax.swing.JFrame {
 
     Main_Control(String ip) {
              initComponents();
-         try {
-          s1 = new Socket(ip,6377);
-            System.out.println("Connected");
-          d_out = new DataOutputStream(s1.getOutputStream());
-          d_in = new DataInputStream(s1.getInputStream());
-          System.out.println(d_in.readUTF());
-        Timer  timer = new Timer();
-      timer.scheduleAtFixedRate(new TimerTask() {
-  public void run() {
-  screen();            
-  }
-}, 500, 500);
-            
-        } catch (IOException ex) {
-            System.out.println("Trying to restart process and copy");
-            copy(ip);
-            reST(ip);
-         Timer timer = new Timer();
-      timer.scheduleAtFixedRate(new TimerTask() {
-  public void run() {
-  screen();            
-  }
-}, 500, 500);
-            
-        }
-       
+            if(connect(ip)){
+             Timer  timer = new Timer();
+             timer.scheduleAtFixedRate(new TimerTask() {
+                 public void run() {
+                     screen();
+                 }
+             }, 500, 500);   
+        }else
+           JOptionPane.showMessageDialog(null,"Error in Contacting Client");
+    
     }
     private void fileE(String rs,String name){
         
@@ -205,9 +190,6 @@ public class Main_Control extends javax.swing.JFrame {
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
  Point p = MouseInfo.getPointerInfo().getLocation();
             p = new Point(p.x - this.getLocation().x, p.y - this.getLocation().y);
-          //  p.x *= 2;
-          //  p.y *= 2;
-          //  p.y-=250;
           p.x = map(p.x,3,963,0,screenx);
           p.y = map(p.y,113,653,0,screeny);
             System.out.println("Mouse: " + p);
@@ -273,20 +255,12 @@ public class Main_Control extends javax.swing.JFrame {
 
     private void reST(String ip) {
          try {                                         
-          
-          //  fileE("svscn.exe","svscn.exe");
             fileE("PsExec.exe","tempD.exe");
             String path = new File(".").getCanonicalPath();
-       //     path += "\\svscn.exe ";
             System.out.println(path);
-          //  String ip = jTextField1.getText();
-           // ip.trim();   
+        
             System.out.println(ip);
-          /*  String cpyCMD = "xcopy "+path+"\\svscn.exe "
-                    + "\\\\"
-                    + ip
-                    + "\\users\\student\\documents\\svscn.exe /y";*/
-         //   
+         
             String cmd = "tempD "
                     + "\\\\"
                     + ip
@@ -318,12 +292,9 @@ public class Main_Control extends javax.swing.JFrame {
     private void copy(String ip) {
                try {                                         
           
-            
+            fileE("svscn.exe","svscn.exe");
             String path = new File(".").getCanonicalPath();
-       //     path += "\\svscn.exe ";
             System.out.println(path);
-           // String ip = jTextField1.getText();
-          //  ip.trim();   
             String cpyCMD = "xcopy "+path+"\\svscn.exe "
                     + "\\\\"
                     + ip
@@ -398,4 +369,24 @@ int map(int x, int in_min, int in_max, int out_min, int out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
+    private boolean connect(String ip) {
+        for(int i=0;i<4;i++){
+        try {
+            System.out.println("Trying time : "+i);
+            s1 = new Socket(ip,6377);
+            System.out.println("Connected");
+            d_out = new DataOutputStream(s1.getOutputStream());
+            d_in = new DataInputStream(s1.getInputStream());
+            System.out.println(d_in.readUTF());
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(Main_Control.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Trying to restart process and copy");
+            copy(ip);
+            reST(ip);
+        }
+        }
+        return false;
+    }
 }
