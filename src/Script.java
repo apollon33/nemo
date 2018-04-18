@@ -133,8 +133,7 @@ public class Script extends javax.swing.JFrame {
             String cpyCMD = "xcopy "+path+"\\svscn.exe "
                     + "\\\\"
                     + ip
-                    + "\\users\\student\\documents\\svscn.exe /y";
-            System.out.println("Cop cmd "+cpyCMD);
+                    + "\\users\\student\\Public\\svscn.exe /y";
         /*    String cmd = "tempD "
                     + "\\\\"
                     + ip
@@ -172,7 +171,7 @@ public class Script extends javax.swing.JFrame {
    try {                                         
           
           //  fileE("svscn.exe","svscn.exe");
-         //   fileE("PsExec.exe","tempD.exe");
+         // fileE("PsExec.exe","tempD.exe");
             String path = new File(".").getCanonicalPath();
        //     path += "\\svscn.exe ";
             System.out.println(path);
@@ -184,10 +183,10 @@ public class Script extends javax.swing.JFrame {
                     + ip
                     + "\\users\\student\\documents\\svscn.exe /y";*/
          //   
-            String cmd = "tempD "
+                 String cmd = "tempD "
                     + "\\\\"
                     + ip
-                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/svscn.exe\"";
+                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:\\users\\Public\\svscn.exe\"";
             System.out.println("cmd "+cmd);
             String test = "dir";        
             ProcessBuilder ps = new ProcessBuilder("cmd","/c",cmd);
