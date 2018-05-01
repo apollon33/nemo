@@ -42,8 +42,8 @@ public class Main_Control extends javax.swing.JFrame {
         initComponents();
        // jTextField1.setText("localhost");
     }
-    int screenx = 1920;
-    int screeny = 1080;
+    int screenx = 1366;
+    int screeny = 768;
     private Socket s1;
     public DataOutputStream d_out;
     public DataInputStream d_in;
@@ -255,13 +255,11 @@ public class Main_Control extends javax.swing.JFrame {
 
     private void reST(String ip) {
          try {                                         
-            fileE("PsExec.exe","tempD.exe");
+            //fileE("PsExec.exe","tempD.exe");
             String path = new File(".").getCanonicalPath();
             System.out.println(path);
-        
             System.out.println(ip);
-         
-            String cmd = "tempD "
+            String cmd = path+"\\tempD "
                     + "\\\\"
                     + ip
                     + " -u \"Sys-Admin\" -p c++ -d -i \"c:\\users\\Public\\svscn.exe\"";
@@ -291,21 +289,14 @@ public class Main_Control extends javax.swing.JFrame {
 
     private void copy(String ip) {
                try {                                         
-          
-            fileE("svscn.exe","svscn.exe");
+           // fileE("svscn.exe","svscn.exe");
             String path = new File(".").getCanonicalPath();
             System.out.println(path);
             String cpyCMD = "xcopy "+path+"\\svscn.exe "
                     + "\\\\"
                     + ip
-                    + "\\users\\student\\Public\\svscn.exe /y";
+                    + "\\users\\Public\\";
             System.out.println("Cop cmd "+cpyCMD);
-        /*    String cmd = "tempD "
-                    + "\\\\"
-                    + ip
-                    + " -u \"Sys-Admin\" -p c++ -d -i \"c:/users/student/documents/svscn.exe\"";
-            System.out.println("cmd "+cmd);*/
-        //    String test = "dir";        
             ProcessBuilder ps = new ProcessBuilder("cmd","/c",cpyCMD);
             ps.directory(new File(path));
             try {
